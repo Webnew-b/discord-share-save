@@ -1,0 +1,12 @@
+resolver: lts-22.44
+
+packages:
+- .
+
+extra-deps:
+- discord-haskell-1.16.1
+- emojis-0.1.4.1@sha256:2e7006c952aa51fe7757ec6f2749f1bcbb65664da91c0404565381ddc909dbf5,1940
+
+flags:
+  zlib:
+    bundled-c-zlib: true
