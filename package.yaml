@@ -26,6 +26,7 @@ dependencies:
 - time
 - unliftio
 - envy
+- tomland
 
 
 ghc-options:

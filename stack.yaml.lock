@@ -18,6 +18,20 @@ packages:
       size: 482
   original:
     hackage: emojis-0.1.4.1@sha256:2e7006c952aa51fe7757ec6f2749f1bcbb65664da91c0404565381ddc909dbf5,1940
+- completed:
+    hackage: tomland-1.3.3.3@sha256:5a1883fbe1a59bc3e70b3058ca2e1d0fa4add0727f1f3154fbb2f69339fd9429,9404
+    pantry-tree:
+      sha256: 0cb3d9f13b2fe45c2f87331aaa5fcc9ce74e1be50f48a70eeb98556de61c72db
+      size: 6430
+  original:
+    hackage: tomland-1.3.3.3@sha256:5a1883fbe1a59bc3e70b3058ca2e1d0fa4add0727f1f3154fbb2f69339fd9429,9404
+- completed:
+    hackage: validation-selective-0.2.0.0@sha256:7f7d78b28f1bf2165b5d4da0aa98eb7e4a81f56b45ff1e2cbede08f02d8fa192,3917
+    pantry-tree:
+      sha256: c9dec3eb9631ba3c85ecd92ac21a1155635ef9ba0bf66cedf9622df64f540dc8
+      size: 697
+  original:
+    hackage: validation-selective-0.2.0.0@sha256:7f7d78b28f1bf2165b5d4da0aa98eb7e4a81f56b45ff1e2cbede08f02d8fa192,3917
 snapshots:
 - completed:
     sha256: 238fa745b64f91184f9aa518fe04bdde6552533d169b0da5256670df83a0f1a9
