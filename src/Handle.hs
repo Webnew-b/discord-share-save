@@ -38,12 +38,7 @@ eventHandler cc event =
     when (content == T.pack "!status") $ do 
       void $ restCall $ R.CreateMessage cid (T.pack "Bot is running!")
 
-    when (content == T.pack "!stop") $ do 
-      void $ restCall $ R.CreateMessage cid (T.pack "Bot is stopping,bye!")
-      stopDiscord
-
   _ -> pure ()
-
 
 
 fromBot :: Message -> Bool
@@ -61,12 +56,11 @@ handleBot botToken cc = do
         eventHandler cc e
     , discordOnStart = liftIO $ putStrLn "Robot is running"
     , discordOnLog = \s -> TIO.putStrLn s >> TIO.putStrLn ""
-    -- Add gateway intents for discord-haskell 1.16.1
     , discordGatewayIntent = def 
-        { gatewayIntentGuilds = True              -- 接收服务器事件
-        , gatewayIntentMessageChanges = True       -- 消息更新/删除
-        , gatewayIntentDirectMessageChanges = True -- 私信
-        , gatewayIntentMessageContent = True      -- ★最重要！消息内容★
+        { gatewayIntentGuilds = True
+        , gatewayIntentMessageChanges = True
+        , gatewayIntentDirectMessageChanges = True
+        , gatewayIntentMessageContent = True
         }
     }
 
