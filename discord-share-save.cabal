@@ -26,7 +26,9 @@ source-repository head
 library
   exposed-modules:
       Config
+      Handle
       Lib
+      Util
   other-modules:
       Paths_discord_share_save
   autogen-modules:
@@ -68,6 +70,7 @@ test-suite discord-share-save-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      TestBot
       Paths_discord_share_save
   autogen-modules:
       Paths_discord_share_save
