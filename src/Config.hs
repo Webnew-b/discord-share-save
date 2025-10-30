@@ -5,10 +5,8 @@ module Config (
   ,loadChannelConfig
   ,ChannelConfig(..)
   ,SourceChannel(..)
-  ,MaxChannel(..)
   ,TargetChannel(..)
   ,getSourceChannels
-  ,getMaxChannel
   ,getTargetChannel
 ) where
 
@@ -29,14 +27,11 @@ data ChannelConfig = ChannelConfig
   {
     source ::SourceChannel
     ,target :: TargetChannel
-    ,max_channel :: MaxChannel
   } deriving (Show)
 
 newtype SourceChannel = SourceChannel{source_channels :: [String]} deriving (Show)
 
 newtype TargetChannel = TargetChannel {target_channel :: String}  deriving (Show) 
-
-newtype MaxChannel = MaxChannel {max_amount :: Int} deriving (Show)
 
 sourceChannelCodec :: TomlCodec SourceChannel
 sourceChannelCodec = SourceChannel
@@ -46,22 +41,13 @@ targetChannelCodec :: TomlCodec TargetChannel
 targetChannelCodec = TargetChannel
   <$> Toml.string "channel" .= target_channel
 
-maxChannelCodec :: TomlCodec MaxChannel
-maxChannelCodec = MaxChannel
-  <$> Toml.int "amount" .= max_amount
-
-
-channelConfigCodex :: TomlCodec ChannelConfig
-channelConfigCodex = ChannelConfig
+channelConfigCodec :: TomlCodec ChannelConfig
+channelConfigCodec = ChannelConfig
   <$> Toml.table sourceChannelCodec  "source" .= source
   <*> Toml.table targetChannelCodec "target" .= target
-  <*> Toml.table maxChannelCodec "max_channel" .= max_channel
 
 getSourceChannels :: ChannelConfig -> [String]
 getSourceChannels = source_channels . source
-
-getMaxChannel :: ChannelConfig -> Int
-getMaxChannel = max_amount . max_channel
 
 getTargetChannel :: ChannelConfig -> String
 getTargetChannel = target_channel . target
@@ -69,7 +55,7 @@ getTargetChannel = target_channel . target
 
 loadChannelConfig :: FilePath -> IO ChannelConfig
 loadChannelConfig path = do
-  result <- decodeFileExact channelConfigCodex path
+  result <- decodeFileExact channelConfigCodec path
   case result of
     Left err -> ioError (userError $ "Toml decode error:\n" ++ show err)
     Right cfg -> do
