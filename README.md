@@ -9,26 +9,30 @@ This version focuses on **stability and configurable message forwarding** betwee
 ## Features
 
 - Configurable `source_channels` and `target_id` via `config.toml`
-- Automatic environment variable loading for `DISCORD_TOKEN`
+- Automatic environment variable loading for `DISCORD_SECRET`
 - Detects messages containing URLs or @Bot mentions
 - Forwards messages from multiple source channels to a **fixed discussion thread**
 - Prevents self-forward loops (no overlapping between source and target)
 
 ## Configuration Example
+Create config.toml
+``` sh
+cp config.toml.example config.toml
+```
 Configure in confg.toml
 
 ```toml
 [source]
-channels = ["111", "222", "333"] # source channels
+source = ["111", "222", "333"] # source channels
 
 [target]
-id = "444" # target thread or channel
+channel = "444" # target thread or channel
 ```
 
 ## Environment
 
 ```
-export DISCORD_TOKEN=your_bot_token_here
+export DISCORD_SECRET=your_bot_token_here
 ```
 
 ## Known Limitations
