@@ -27,8 +27,11 @@ invokeFunc = do
   putStrLn $ "Source list:" ++ show (Config.getSourceChannels channel_config)
 
   stopFlag <- newEmptyTMVarIO
+  stopF <- newTVarIO False
+
   void $ installHandler keyboardSignal (CatchOnce $ do
       putStrLn "\n Caught Ctrl-C, stopping bot..."
+      atomically $ writeTVar stopF True
       atomically $ putTMVar stopFlag ()
     ) Nothing
 
@@ -38,8 +41,6 @@ invokeFunc = do
 
 
   putStrLn "[Main] Discord connected,starting worker"
-
-  stopF <- newTVarIO False
   runReaderT ( startWorker q stopF channel_config eventHandler) handle
 
   race_

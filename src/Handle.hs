@@ -32,6 +32,7 @@ eventHandler cc event =
         author = userName $ messageAuthor m
         sources = Config.getSourceChannels cc
         target = Config.getTargetChannel cc
+        -- TODO: Replace `read` with `readMaybe` for safe config parsing.
         sourcesId = map read sources
 
     when (cid `elem` sourcesId) $ do
