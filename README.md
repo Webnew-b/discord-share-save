@@ -43,7 +43,7 @@ export DISCORD_SECRET=your_bot_token_here
 
 ## Next Milestone
 
-- [ ] Task 9: Introduce event queue (`TQueue`) to serialize event handling  
+- [x] Task 9: Introduce event queue (`TQueue`) to serialize event handling  
 - [ ] Task 10: Implement rate limiter and “time-stop” mechanism  
 - [ ] Task 11: Configuration structure refactor and validation improvements  
 - [ ] Task 12: Full Nix environment management and configuration support

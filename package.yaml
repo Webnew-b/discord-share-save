@@ -1,5 +1,5 @@
 name:                discord-share-save
-version:             0.1.0.1
+version:             0.1.1.0
 github:              "Webnew-b/discord-share-save"
 license:             BSD-3-Clause
 author:              "lexon"
@@ -21,12 +21,15 @@ description:         Please see the README on GitHub at <https://github.com/Webn
 
 dependencies:
 - base >= 4.13 && < 5
+- unix
 - discord-haskell
 - text
 - time
 - unliftio
 - envy
 - tomland
+- mtl
+- async
 
 
 ghc-options:
