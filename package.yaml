@@ -21,12 +21,15 @@ description:         Please see the README on GitHub at <https://github.com/Webn
 
 dependencies:
 - base >= 4.13 && < 5
+- unix
 - discord-haskell
 - text
 - time
 - unliftio
 - envy
 - tomland
+- mtl
+- async
 
 
 ghc-options:

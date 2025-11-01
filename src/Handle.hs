@@ -1,21 +1,31 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Handle (handleBot) where
+module Handle (handleBot,eventHandler) where
 
 import Discord.Types
 import qualified Data.Text as T
-import Discord 
+import Discord
 import UnliftIO (MonadIO(liftIO))
 import Control.Monad ( when, void, unless)
 import qualified Discord.Requests as R
 import qualified Data.Text.IO as TIO
 import qualified Config
+import UnliftIO.STM
+    ( newTQueueIO,
+      TQueue,
+      putTMVar,
+      atomically,
+      TMVar, newEmptyTMVarIO )
+import Queue (enqueueEvent)
+import Control.Concurrent.Async (Async,async)
+import Control.Concurrent (newEmptyMVar, putMVar, takeMVar)
+import Control.Monad.Reader (ask)
 
 eventHandler :: Config.ChannelConfig -> Event -> DiscordHandler ()
-eventHandler cc event = 
-  case event of 
+eventHandler cc event =
+  case event of
   MessageCreate m -> unless ( fromBot m ) $ do
 
-    liftIO $ putStrLn "Handler is running."
+    liftIO $ putStrLn "Event is proccessing..."
 
     let content = messageContent m
         cid = messageChannelId m
@@ -32,10 +42,10 @@ eventHandler cc event =
         _ <- restCall (R.CreateMessage (read target) msg)
         pure ()
 
-    when (content == T.pack "!ping") $ do 
+    when (content == T.pack "!ping") $ do
       void $ restCall $ R.CreateMessage cid (T.pack "Pong!")
 
-    when (content == T.pack "!status") $ do 
+    when (content == T.pack "!status") $ do
       void $ restCall $ R.CreateMessage cid (T.pack "Bot is running!")
 
   _ -> pure ()
@@ -44,19 +54,30 @@ eventHandler cc event =
 fromBot :: Message -> Bool
 fromBot m = userIsBot (messageAuthor m)
 
--- | handleBot argument is BotToken ChannelConfig
-handleBot :: T.Text -> Config.ChannelConfig ->  IO ()
-handleBot botToken cc = do
-  putStrLn "Starting discord Bot"
+type HandledResType = IO(Async T.Text,TMVar (),TQueue Event,DiscordHandle)
 
-  userFacingError <- runDiscord $ def 
+-- | handleBot argument is BotToken ChannelConfig
+handleBot :: T.Text -> HandledResType
+handleBot botToken = do
+  putStrLn "Starting discord Bot"
+  connected <- newEmptyTMVarIO
+  handleVar <- newEmptyMVar
+  q <- newTQueueIO
+
+  userFacingError <- async $ runDiscord $ def
     { discordToken = botToken
-    , discordOnEvent = \e -> do 
-        liftIO $ putStrLn("[EVENT]" ++ take 80 (show e))
-        eventHandler cc e
-    , discordOnStart = liftIO $ putStrLn "Robot is running"
+    , discordOnEvent = \e -> do
+        liftIO $ putStrLn ("[EVENT]" ++ take 80 (show e))
+        case e of
+          MessageCreate _ -> enqueueEvent q e
+          _ -> pure ()
+    , discordOnStart =  do
+        liftIO $ putStrLn "[Discord] connected"
+        atomically $ putTMVar connected ()
+        handle <- ask
+        liftIO $ putMVar handleVar handle 
     , discordOnLog = \s -> TIO.putStrLn s >> TIO.putStrLn ""
-    , discordGatewayIntent = def 
+    , discordGatewayIntent = def
         { gatewayIntentGuilds = True
         , gatewayIntentMessageChanges = True
         , gatewayIntentDirectMessageChanges = True
@@ -64,6 +85,7 @@ handleBot botToken cc = do
         }
     }
 
-  TIO.putStrLn userFacingError
+  handleM <- takeMVar handleVar
 
+  pure (userFacingError,connected,q,handleM)
 
