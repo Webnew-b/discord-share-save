@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Queue (
   worker
   ,enqueueEvent
@@ -22,6 +24,8 @@ enqueueEvent q ev = liftIO . atomically $ writeTQueue q ev
 outqueneEvent :: TQueue Event -> DiscordHandler Event
 outqueneEvent q = liftIO . atomically $ readTQueue q 
 
+
+
 worker :: TQueue Event -> TVar Bool -> ChannelConfig -> EventProcess -> DiscordHandler ()
 worker q stopFlag cfg f = do
   liftIO $ putStrLn "[Worker] started."
@@ -29,7 +33,8 @@ worker q stopFlag cfg f = do
         stop <- liftIO . atomically $ readTVar stopFlag
         unless stop $ do
           ev <- liftIO . atomically $ readTQueue q
-          f cfg ev
+          f cfg ev `catch` \(e :: SomeException) ->
+            liftIO $ putStrLn $ "[Worker] Event handler crashed: " ++ show e
           liftIO $ threadDelay 500000
           loop
   loop
