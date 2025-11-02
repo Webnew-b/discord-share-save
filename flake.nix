@@ -25,11 +25,14 @@
             pkg-config
             git
           ];
-
-          # 环境变量（必要时可以在这里传 TOKEN、LIB_PATH）
-          shellHook = ''
-            echo "🚀 Welcome to Discord-Share-Save dev environment!"
-            echo "💡 Use 'stack build' or 'stack run' to start."
+        DISCORD_SECRET = builtins.getEnv "DISCORD_SECRET";
+        
+        shellHook = ''
+            if [ -f .env ]; then
+              echo "📦 Loading environment from .env ..."
+              export $(grep -v '^#' .env | xargs)
+            fi
+            echo "🚀 Entered Nix dev shell (GHC 9.6.7)"
           '';
         };
       });
