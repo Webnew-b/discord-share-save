@@ -8,6 +8,7 @@ module Config (
   ,TargetChannel(..)
   ,getSourceChannels
   ,getTargetChannel
+  ,getRateLimit
 ) where
 
 import qualified Data.Text as T
@@ -27,11 +28,17 @@ data ChannelConfig = ChannelConfig
   {
     source ::SourceChannel
     ,target :: TargetChannel
+    ,rate_limit::RateLimitConfig
   } deriving (Show)
 
 newtype SourceChannel = SourceChannel{source_channels :: [String]} deriving (Show)
 
 newtype TargetChannel = TargetChannel {target_channel :: String}  deriving (Show) 
+
+data RateLimitConfig = RateLimitConfig {
+  max_request:: Int
+  ,window_time_max :: Int
+} deriving (Show)
 
 sourceChannelCodec :: TomlCodec SourceChannel
 sourceChannelCodec = SourceChannel
@@ -41,10 +48,16 @@ targetChannelCodec :: TomlCodec TargetChannel
 targetChannelCodec = TargetChannel
   <$> Toml.string "channel" .= target_channel
 
+rateLimitCodec :: TomlCodec RateLimitConfig
+rateLimitCodec = RateLimitConfig
+  <$> Toml.int "max_request" .= max_request
+  <*> Toml.int "window_time_max" .= window_time_max
+
 channelConfigCodec :: TomlCodec ChannelConfig
 channelConfigCodec = ChannelConfig
   <$> Toml.table sourceChannelCodec  "source" .= source
   <*> Toml.table targetChannelCodec "target" .= target
+  <*> Toml.table rateLimitCodec "rate_limit" .= rate_limit
 
 getSourceChannels :: ChannelConfig -> [String]
 getSourceChannels = source_channels . source
@@ -52,6 +65,8 @@ getSourceChannels = source_channels . source
 getTargetChannel :: ChannelConfig -> String
 getTargetChannel = target_channel . target
 
+getRateLimit :: ChannelConfig -> (Int,Int)
+getRateLimit =(,) <$> (max_request . rate_limit) <*> (window_time_max . rate_limit)
 
 loadChannelConfig :: FilePath -> IO ChannelConfig
 loadChannelConfig path = do

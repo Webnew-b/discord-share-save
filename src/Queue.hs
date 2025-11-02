@@ -10,7 +10,7 @@ module Queue (
 import UnliftIO
 import Discord
 import Discord.Types
-import Config (ChannelConfig)
+import Config (ChannelConfig, getRateLimit)
 import Control.Monad (unless)
 import Data.Functor (void)
 import Control.Monad.Reader (ask, runReaderT)
@@ -28,8 +28,9 @@ outqueneEvent q = liftIO . atomically $ readTQueue q
 
 worker :: TQueue Event -> TVar Bool -> ChannelConfig -> EventProcess -> DiscordHandler ()
 worker q stopFlag cfg f = do
+  let (mr,wm) = getRateLimit cfg
   liftIO $ putStrLn "[Worker] started."
-  limiter <- liftIO $ newRateLimiter 10 5000
+  limiter <- liftIO $ newRateLimiter mr wm
   liftIO $ startRateLimitResetter limiter
   let loop = do
         stop <- liftIO . atomically $ readTVar stopFlag
