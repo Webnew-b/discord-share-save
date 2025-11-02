@@ -29,6 +29,7 @@ library
       Handle
       Lib
       Queue
+      RateLimit
       Util
   other-modules:
       Paths_discord_share_save
