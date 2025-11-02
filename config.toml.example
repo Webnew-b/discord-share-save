@@ -4,3 +4,6 @@ sources = ["33333333333","22222222222222" ]
 [target]
 channel  = "111111111111111111"
 
+[rate_limit]
+window_time_max = 5000
+max_request = 20
