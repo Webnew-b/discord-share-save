@@ -37,6 +37,7 @@ worker q stopFlag cfg f = do
           ev <- liftIO . atomically $ readTQueue q
           liftIO $ waitIfLimited limiter
           f cfg ev `catch` \(e :: SomeException) ->
+            -- TODO Handle HTTP 429 error
             liftIO $ putStrLn $ "[Worker] Event handler crashed: " ++ show e
           liftIO $ recordRequest limiter
           loop
