@@ -11,10 +11,10 @@ import UnliftIO
 import Discord
 import Discord.Types
 import Config (ChannelConfig)
-import Control.Concurrent
 import Control.Monad (unless)
 import Data.Functor (void)
 import Control.Monad.Reader (ask, runReaderT)
+import RateLimit (newRateLimiter, waitIfLimited, recordRequest, startRateLimitResetter)
 
 type EventProcess = (ChannelConfig -> Event -> DiscordHandler ())
 
@@ -29,13 +29,17 @@ outqueneEvent q = liftIO . atomically $ readTQueue q
 worker :: TQueue Event -> TVar Bool -> ChannelConfig -> EventProcess -> DiscordHandler ()
 worker q stopFlag cfg f = do
   liftIO $ putStrLn "[Worker] started."
+  limiter <- liftIO $ newRateLimiter 10 5000
+  liftIO $ startRateLimitResetter limiter
   let loop = do
         stop <- liftIO . atomically $ readTVar stopFlag
         unless stop $ do
           ev <- liftIO . atomically $ readTQueue q
+          liftIO $ waitIfLimited limiter
           f cfg ev `catch` \(e :: SomeException) ->
+            -- TODO Handle HTTP 429 error
             liftIO $ putStrLn $ "[Worker] Event handler crashed: " ++ show e
-          liftIO $ threadDelay 500000
+          liftIO $ recordRequest limiter
           loop
   loop
   liftIO $ putStrLn "[Worker] stopped gracefully."

@@ -35,16 +35,10 @@ channel = "444" # target thread or channel
 export DISCORD_SECRET=your_bot_token_here
 ```
 
-## Known Limitations
-
-- No rate-limit control yet (429-safe version coming next)
-- Events are handled directly (queue model will be added in v0.2)
-- No attachment forwarding in this preview
-
 ## Next Milestone
 
 - [x] Task 9: Introduce event queue (`TQueue`) to serialize event handling  
-- [ ] Task 10: Implement rate limiter and “time-stop” mechanism  
+- [x] Task 10: Implement rate limiter and “time-stop” mechanism  
 - [ ] Task 11: Configuration structure refactor and validation improvements  
 - [ ] Task 12: Full Nix environment management and configuration support
 
