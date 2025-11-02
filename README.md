@@ -1,4 +1,4 @@
-# Discord Message Forwarding Bot v0.1.0-preview
+# Discord Message Forwarding Bot v0.1.2.0-preview
 
 ## Overview
 
