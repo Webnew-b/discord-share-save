@@ -1,4 +1,4 @@
-# Discord Message Forwarding Bot v0.1.2.0-preview
+# Discord Message Forwarding Bot v0.1.3.0-preview
 
 ## Overview
 
@@ -73,7 +73,7 @@ export DISCORD_SECRET=your_bot_token_here
 
 - [x] Task 9: Introduce event queue (`TQueue`) to serialize event handling  
 - [x] Task 10: Implement rate limiter and “time-stop” mechanism  
-- [ ] Task 11: Configuration structure refactor and validation improvements  
+- [x] Task 11: Configuration structure refactor and validation improvements  
 - [ ] Task 12: Full Nix environment management and configuration support
 
 ## Preview Release
