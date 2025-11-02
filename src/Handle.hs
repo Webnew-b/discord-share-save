@@ -32,7 +32,6 @@ eventHandler cc event =
         author = userName $ messageAuthor m
         sources = Config.getSourceChannels cc
         target = Config.getTargetChannel cc
-        -- TODO: Replace `read` with `readMaybe` for safe config parsing.
         sourcesId = map read sources
 
     when (cid `elem` sourcesId) $ do
@@ -40,7 +39,7 @@ eventHandler cc event =
           mentionedBot = "<@" `T.isPrefixOf` content
       when (containsURL || mentionedBot) $ do
         let msg = T.concat [author ,":",content]
-        _ <- restCall (R.CreateMessage (read target) msg)
+        _ <- restCall (R.CreateMessage target msg)
         pure ()
 
     when (content == T.pack "!ping") $ do
