@@ -38,7 +38,7 @@ Edit the file to match your channel IDs:
 # Input strings must be Discord channel IDs.
 # ==============================================
 [source]
-source = ["111", "222", "333"]
+sources = ["111", "222", "333"]
 
 # ==============================================
 # Target Channel Configuration
