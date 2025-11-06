@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Discord Multi-Channel Forwarding Bot (v0.2.0.0-beta)**  
+**Discord Multi-Channel Forwarding Bot (v0.2.1.0-beta)**  
 A Haskell-based bot that forwards messages between multiple channels or discussion threads.  
 This beta release focuses on **stability, configuration clarity, and graceful shutdown**.
 
@@ -105,13 +105,16 @@ Current version: **v0.2.0.0-beta**
 | Task 13 | Add automated test suite (Hspec) for core modules            | completed   |
 | Task 14 | CI/CD integration (Woodpecker / GitHub Actions)              | In progress |
 
-## Beta Release Notes — v0.2.0.0
-
-- Marked as **first beta release**
-- All core functionalities (forwarding, queueing, rate-limit, shutdown) implemented
-- Configuration and environment handling stabilized
-- Automated testing and CI integration planned for `v1.0.0.0`
-- Focus of this release: **runtime stability & clean architecture**
+## Beta Release Notes — v0.2.1.0
+- Marked as first fully tested beta release
+- Implemented and validated all core modules:
+  1. Configuration loading and validation (Config)
+  2. Event queue and graceful shutdown (Queue)
+  3. Rate limiter with window reset (RateLimit)
+- Added automated test suite using Hspec
+- Verified config correctness, queue lifecycle, and rate-limit behavior
+- Improved developer workflow:
+    stack test for local testing
 
 ## Next Milestone (v1.0.0.0)
 
