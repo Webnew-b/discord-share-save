@@ -6,6 +6,7 @@ module Config (
   ,ChannelConfig(..)
   ,SourceChannel(..)
   ,TargetChannel(..)
+  ,RateLimitConfig(..)
   ,getSourceChannels
   ,getTargetChannel
   ,getRateLimit

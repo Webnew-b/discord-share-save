@@ -5,7 +5,7 @@ cabal-version: 2.2
 -- see: https://github.com/sol/hpack
 
 name:           discord-share-save
-version:        0.2.0.0
+version:        0.2.1.0
 description:    Please see the README on GitHub at <https://github.com/Webnew-b/discord-share-save#readme>
 homepage:       https://github.com/Webnew-b/discord-share-save#readme
 bug-reports:    https://github.com/Webnew-b/discord-share-save/issues
@@ -78,8 +78,9 @@ test-suite discord-share-save-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      TestBot
-      TestStop
+      ConfigSpec
+      QueueSpec
+      RateLimitSpec
       Paths_discord_share_save
   autogen-modules:
       Paths_discord_share_save
@@ -88,11 +89,14 @@ test-suite discord-share-save-test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       async
-    , base >=4.13 && <5
+    , base
     , discord-haskell
     , discord-share-save
     , envy
+    , hspec
     , mtl
+    , stm
+    , temporary
     , text
     , time
     , tomland

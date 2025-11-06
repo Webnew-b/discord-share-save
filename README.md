@@ -102,8 +102,8 @@ Current version: **v0.2.0.0-beta**
 | Task 10 | Implement rate limiter and “time-stop” mechanism             | completed   |
 | Task 11 | Configuration structure refactor and validation improvements | completed   |
 | Task 12 | Full Nix environment management and configuration support    | completed   |
-| Task 13 | Add automated test suite (Hspec) for core modules            | In progress |
-| Task 14 | CI/CD integration (Woodpecker / GitHub Actions)              | Planned     |
+| Task 13 | Add automated test suite (Hspec) for core modules            | completed   |
+| Task 14 | CI/CD integration (Woodpecker / GitHub Actions)              | In progress |
 
 ## Beta Release Notes — v0.2.0.0
 
