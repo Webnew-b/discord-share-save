@@ -78,8 +78,9 @@ test-suite discord-share-save-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      TestBot
-      TestStop
+      ConfigSpec
+      QueueSpec
+      RateLimitSpec
       Paths_discord_share_save
   autogen-modules:
       Paths_discord_share_save
@@ -88,11 +89,14 @@ test-suite discord-share-save-test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       async
-    , base >=4.13 && <5
+    , base
     , discord-haskell
     , discord-share-save
     , envy
+    , hspec
     , mtl
+    , stm
+    , temporary
     , text
     , time
     , tomland
